@@ -19,7 +19,8 @@ from utilities_tf import load_batch_gcnn
 
 
 def load_batch_tf(x):
-    return tf.py_func(
+    return tf.py_func(                                                      #tf.py_func接收的是tensor，然后将其转化为numpy array送入func函数，
+                                                                            #最后再将func函数输出的numpy array转化为tensor返回
         load_batch_gcnn,
         [x],
         [tf.float32, tf.int32, tf.float32, tf.float32, tf.int32, tf.int32, tf.int32, tf.int32, tf.int32, tf.float32])
@@ -100,8 +101,10 @@ def process(model, dataloader, top_k, optimizer=None):
         mean_kacc += kacc * batch_size
         n_samples_processed += batch_size
 
-    mean_loss /= n_samples_processed
-    mean_kacc /= n_samples_processed
+    #mean_loss /= n_samples_processed
+    #mean_kacc /= n_samples_processed
+    mean_loss = mean_loss / n_samples_processed
+    mean_kacc = mean_kacc / n_samples_processed
 
     return mean_loss, mean_kacc
 
@@ -179,7 +182,7 @@ if __name__ == '__main__':
         os.environ['CUDA_VISIBLE_DEVICES'] = ''
     else:
         os.environ['CUDA_VISIBLE_DEVICES'] = f'{args.gpu}'
-    config = tf.ConfigProto()
+    config = tf.ConfigProto()       #配置tf.Session的运算方式
     config.gpu_options.allow_growth = True
     tf.enable_eager_execution(config)
     tf.executing_eagerly()
@@ -211,7 +214,7 @@ if __name__ == '__main__':
 
 
     if train_ncands_limit < np.inf:
-        train_files = take_subset(rng.permutation(train_files), train_ncands_limit)
+        train_files = take_subset(rng.permutation(train_files), train_ncands_limit)     #rng.permutation 随机排列一个序列，或者数组。
     log(f"{len(train_files)} training samples", logfile)
     if valid_ncands_limit < np.inf:
         valid_files = take_subset(valid_files, valid_ncands_limit)
@@ -226,10 +229,10 @@ if __name__ == '__main__':
     valid_data = valid_data.prefetch(1)
 
     pretrain_files = [f for i, f in enumerate(train_files) if i % 10 == 0]
-    pretrain_data = tf.data.Dataset.from_tensor_slices(pretrain_files)
-    pretrain_data = pretrain_data.batch(pretrain_batch_size)
-    pretrain_data = pretrain_data.map(load_batch_tf)
-    pretrain_data = pretrain_data.prefetch(1)
+    pretrain_data = tf.data.Dataset.from_tensor_slices(pretrain_files)  #加载数据
+    pretrain_data = pretrain_data.batch(pretrain_batch_size)            #设置bactch_size
+    pretrain_data = pretrain_data.map(load_batch_tf)                    #进行预处理
+    pretrain_data = pretrain_data.prefetch(1)                           #预读取
 
     ### MODEL LOADING ###
     sys.path.insert(0, os.path.abspath(f'models/{args.model}'))

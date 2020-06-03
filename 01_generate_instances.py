@@ -52,7 +52,7 @@ class Graph:
             densest_neighbors = sorted(neighbors, key=lambda x: -self.degrees[x])
             for neighbor in densest_neighbors:
                 # Can you add it to the clique, and maintain cliqueness?
-                if all([neighbor in self.neighbors[clique_node] for clique_node in clique]):
+                if all([neighbor in self.neighbors[clique_node] for clique_node in clique]):#不明白为什么不直接把densest——nei直接append
                     clique.add(neighbor)
             cliques.append(clique)
             leftover_nodes = [node for node in leftover_nodes if node not in clique]
@@ -81,7 +81,7 @@ class Graph:
         edges = set()
         degrees = np.zeros(number_of_nodes, dtype=int)
         neighbors = {node: set() for node in range(number_of_nodes)}
-        for edge in combinations(np.arange(number_of_nodes), 2):
+        for edge in combinations(np.arange(number_of_nodes), 2): #combinations可以实现排列组合
             if random.uniform() < edge_probability:
                 edges.add(edge)
                 degrees[edge[0]] += 1
@@ -110,8 +110,8 @@ class Graph:
         Graph
             The generated graph.
         """
-        assert affinity >= 1 and affinity < number_of_nodes
-
+        assert affinity >= 1 and affinity < number_of_nodes    #当表达式为真时，程序继续往下执行；
+                                                               #当表达式为假时，抛出AssertionError错误，并将  参数  输出
         edges = set()
         degrees = np.zeros(number_of_nodes, dtype=int)
         neighbors = {node: set() for node in range(number_of_nodes)}
@@ -462,13 +462,13 @@ def generate_capacited_facility_location(random, filename, n_customers, n_facili
     ratio: float
         The desired capacity / demand ratio.
     """
-    c_x = rng.rand(n_customers)
+    c_x = rng.rand(n_customers) #产生n_customers个[0,1]之间的随机数
     c_y = rng.rand(n_customers)
 
     f_x = rng.rand(n_facilities)
     f_y = rng.rand(n_facilities)
 
-    demands = rng.randint(5, 35+1, size=n_customers)
+    demands = rng.randint(5, 35+1, size=n_customers)   #在[5,36)上生成离散均匀分布的整数值
     capacities = rng.randint(10, 160+1, size=n_facilities)
     fixed_costs = rng.randint(100, 110+1, size=n_facilities) * np.sqrt(capacities) \
             + rng.randint(90+1, size=n_facilities)
@@ -771,7 +771,7 @@ if __name__ == '__main__':
         lp_dir = f'data/instances/facilities/train_{number_of_customers}_{number_of_facilities}_{ratio}'
         print(f"{n} instances in {lp_dir}")
         os.makedirs(lp_dir)
-        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])
+        filenames.extend([os.path.join(lp_dir, f'instance_{i+1}.lp') for i in range(n)])   #extend() 函数用于在列表末尾一次性追加另一个序列中的多个值
         ncustomerss.extend([number_of_customers] * n)
         nfacilitiess.extend([number_of_facilities] * n)
         ratios.extend([ratio] * n)
@@ -833,7 +833,8 @@ if __name__ == '__main__':
         ratios.extend([ratio] * n)
 
         # actually generate the instances
-        for filename, ncs, nfs, r in zip(filenames, ncustomerss, nfacilitiess, ratios):
+        for filename, ncs, nfs, r in zip(filenames, ncustomerss, nfacilitiess, ratios): #zip() 函数用于将可迭代的对象作为参数，
+                                                                                        #将对象中对应的元素打包成一个个元组，然后返回由这些元组组成的列表
             print(f"  generating file {filename} ...")
             generate_capacited_facility_location(rng, filename, n_customers=ncs, n_facilities=nfs, ratio=r)
 

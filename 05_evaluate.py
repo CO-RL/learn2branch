@@ -142,8 +142,10 @@ if __name__ == '__main__':
     result_file = f"{args.problem}_{time.strftime('%Y%m%d-%H%M%S')}.csv"
     instances = []
     seeds = [0, 1, 2, 3, 4]
-    gcnn_models = ['baseline']
-    other_models = ['extratrees_gcnn_agg', 'lambdamart_khalil', 'svmrank_khalil']
+    #gcnn_models = ['baseline']
+    gcnn_models = []#lhj
+    #other_models = ['extratrees_gcnn_agg', 'lambdamart_khalil', 'svmrank_khalil']
+    other_models = ['extratrees_gcnn_agg', 'lambdamart_khalil']#lhj
     internal_branchers = ['relpscost']
     time_limit = 3600
 

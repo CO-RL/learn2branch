@@ -12,7 +12,7 @@ def load_samples(filenames, feat_type, label_type, augment, qbnorm, size_limit, 
     x, y, ncands = [], [], []
     total_ncands = 0
 
-    for i, filename in enumerate(filenames):
+    for i, filename in enumerate(filenames):   #enumerate() 函数用于将一个可遍历的数据对象(如列表、元组或字符串)组合为一个索引序列，同时列出数据和数据下标
         cand_x, cand_y, best = load_flat_samples(filename, feat_type, label_type, augment, qbnorm)
 
         x.append(cand_x)
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     train_x = (train_x - x_shift) / x_scale
 
     # Saving feature parameters
-    with open(f"{running_dir}/feat_specs.pkl", "wb") as file:
+    with open(f"{running_dir}/feat_specs.pkl", "wb") as file: #'wb'是字节写入，'w+'是文本写入
         pickle.dump({
                 'type': feat_type,
                 'augment': feat_augment,
