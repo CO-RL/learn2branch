@@ -219,11 +219,11 @@ def collect_samples(instances, out_dir, rng, n_samples, n_jobs,
     os.makedirs(out_dir, exist_ok=True)
 
     # start workers
-    orders_queue = mp.Queue(maxsize=2*n_jobs)
+    orders_queue = mp.Queue(maxsize=2*n_jobs)   #multiprocessing.Queue 多进程加快图片读取速度
     answers_queue = mp.SimpleQueue()
     workers = []
     for i in range(n_jobs):
-        p = mp.Process(
+        p = mp.Process(                     #通过创建一个 Process 对象然后调用它的 start() 方法来生成进程
                 target=make_samples,
                 args=(orders_queue, answers_queue),
                 daemon=True)
@@ -233,7 +233,7 @@ def collect_samples(instances, out_dir, rng, n_samples, n_jobs,
     tmp_samples_dir = f'{out_dir}/tmp'
     os.makedirs(tmp_samples_dir, exist_ok=True)
 
-    # start dispatcher
+    # start dispatcher 调度员
     dispatcher = mp.Process(
             target=send_orders,
             args=(orders_queue, instances, rng.randint(2**32), exploration_policy, query_expert_prob, time_limit, tmp_samples_dir),
@@ -289,7 +289,7 @@ def collect_samples(instances, out_dir, rng, n_samples, n_jobs,
     for p in workers:
         p.terminate()
 
-    shutil.rmtree(tmp_samples_dir, ignore_errors=True)
+    shutil.rmtree(tmp_samples_dir, ignore_errors=True) #表示递归删除文件夹下的所有子文件夹和子文件
 
 
 if __name__ == '__main__':
@@ -297,7 +297,7 @@ if __name__ == '__main__':
     parser.add_argument(
         'problem',
         help='MILP instance type to process.',
-        choices=['setcover', 'cauctions', 'facilities', 'indset'],
+        choices=['setcover', 'cauctions', 'facilities', 'indset', 'p_center', 'p_medium', 'LSCP', 'MCLP'],
     )
     parser.add_argument(
         '-s', '--seed',
@@ -348,11 +348,35 @@ if __name__ == '__main__':
         out_dir = 'data/samples/indset/500_4'
 
     elif args.problem == 'facilities':
-        instances_train = glob.glob('data/instances/facilities/train_100_100_5/*.lp')
+        instances_train = glob.glob('data/instances/facilities/train_100_100_5/*.lp') #glob模块可用于对文件路径名实现模糊查找
         instances_valid = glob.glob('data/instances/facilities/valid_100_100_5/*.lp')
         instances_test = glob.glob('data/instances/facilities/test_100_100_5/*.lp')
         out_dir = 'data/samples/facilities/100_100_5'
         time_limit = 600
+
+    elif args.problem == 'p_center':
+        instances_train = glob.glob('data/instances/p_center/train_100_10_5/*.lp')
+        instances_valid = glob.glob('data/instances/p_center/valid_100_10_5/*.lp')
+        instances_test = glob.glob('data/instances/p_center/test_100_10_5/*.lp')
+        out_dir = 'data/samples/p_center/100_100_5'
+
+    elif args.problem == 'p_median':
+        instances_train = glob.glob('data/instances/p_median/train_100_100_5/*.lp')
+        instances_valid = glob.glob('data/instances/p_median/valid_100_100_5/*.lp')
+        instances_test = glob.glob('data/instances/p_median/test_100_100_5/*.lp')
+        out_dir = 'data/samples/p_median/100_100_5'
+
+    elif args.problem == 'LSCP':
+        instances_train = glob.glob('data/instances/LSCP/train_100_100_5/*.lp')
+        instances_valid = glob.glob('data/instances/LSCP/valid_100_100_5/*.lp')
+        instances_test = glob.glob('data/instances/LSCP/test_100_100_5/*.lp')
+        out_dir = 'data/samples/LSCP/100_100_5'
+    
+    elif args.problem == 'MCLP':
+        instances_train = glob.glob('data/instances/MCLP/train_100_100_0.2_8/*.lp')
+        instances_valid = glob.glob('data/instances/MCLP/valid_100_100_0.2_8/*.lp')
+        instances_test = glob.glob('data/instances/MCLP/test_100_100_0.2_8/*.lp')
+        out_dir = 'data/samples/MCLP/100_100_0.2_8'
 
     else:
         raise NotImplementedError
