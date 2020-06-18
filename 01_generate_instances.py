@@ -484,8 +484,7 @@ def generate_capacited_facility_location(random, filename, n_customers, n_facili
 
     # transportation costs
     trans_costs = np.sqrt(
-            (c_x.reshape((-1, 1)) - f_x.reshape((1, -1))) ** 2 \           
-            + (c_y.reshape((-1, 1)) - f_y.reshape((1, -1))) ** 2) * 10 * demands.reshape((-1, 1)) #reshape((-1, 1)使得矩阵重组为n*1
+            (c_x.reshape((-1, 1)) - f_x.reshape((1, -1))) ** 2 + (c_y.reshape((-1, 1)) - f_y.reshape((1, -1))) ** 2) * 10 * demands.reshape((-1, 1)) #reshape((-1, 1)使得矩阵重组为n*1
 
     # write problem
     with open(filename, 'w') as file:
@@ -921,7 +920,7 @@ if __name__ == '__main__':
     parser.add_argument(
         'problem',
         help='MILP instance type to process.',
-        choices=['setcover', 'cauctions', 'facilities', 'indset'],
+        choices=['setcover', 'cauctions', 'facilities', 'indset', 'p_median', 'p_center', 'LSCP', 'MCLP'],
     )
     parser.add_argument(
         '-s', '--seed',
@@ -1109,7 +1108,7 @@ if __name__ == '__main__':
         nbidss.extend([number_of_bids ] * n)
 
         # small transfer instances
-         n = 100
+        n = 100
         number_of_items = 100
         number_of_bids = 500
         lp_dir = f'data/instances/cauctions/transfer_{number_of_items}_{number_of_bids}'
