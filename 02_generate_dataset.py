@@ -367,10 +367,10 @@ if __name__ == '__main__':
         out_dir = 'data/samples/p_median/100_100_5'
 
     elif args.problem == 'LSCP':
-        instances_train = glob.glob('data/instances/LSCP/train_100_100_5/*.lp')
-        instances_valid = glob.glob('data/instances/LSCP/valid_100_100_5/*.lp')
-        instances_test = glob.glob('data/instances/LSCP/test_100_100_5/*.lp')
-        out_dir = 'data/samples/LSCP/100_100_5'
+        instances_train = glob.glob('data/instances/LSCP/train_100_100_0.2/*.lp')
+        instances_valid = glob.glob('data/instances/LSCP/valid_100_100_0.2/*.lp')
+        instances_test = glob.glob('data/instances/LSCP/test_100_100_0.2/*.lp')
+        out_dir = 'data/samples/LSCP/100_100_0.2'
     
     elif args.problem == 'MCLP':
         instances_train = glob.glob('data/instances/MCLP/train_100_100_0.2_8/*.lp')
