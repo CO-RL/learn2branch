@@ -297,7 +297,7 @@ if __name__ == '__main__':
     parser.add_argument(
         'problem',
         help='MILP instance type to process.',
-        choices=['setcover', 'cauctions', 'facilities', 'indset', 'p_center', 'p_medium', 'LSCP', 'MCLP'],
+        choices=['setcover', 'cauctions', 'facilities', 'indset', 'p_center', 'p_median', 'LSCP', 'MCLP'],
     )
     parser.add_argument(
         '-s', '--seed',
@@ -358,7 +358,7 @@ if __name__ == '__main__':
         instances_train = glob.glob('data/instances/p_center/train_100_10_5/*.lp')
         instances_valid = glob.glob('data/instances/p_center/valid_100_10_5/*.lp')
         instances_test = glob.glob('data/instances/p_center/test_100_10_5/*.lp')
-        out_dir = 'data/samples/p_center/100_100_5'
+        out_dir = 'data/samples/p_center/100_10_5'
 
     elif args.problem == 'p_median':
         instances_train = glob.glob('data/instances/p_median/train_100_100_5/*.lp')
