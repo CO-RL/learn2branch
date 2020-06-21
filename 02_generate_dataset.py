@@ -297,7 +297,7 @@ if __name__ == '__main__':
     parser.add_argument(
         'problem',
         help='MILP instance type to process.',
-        choices=['setcover', 'cauctions', 'facilities', 'indset', 'p_center', 'p_median', 'LSCP', 'MCLP'],
+        choices=['setcover', 'cauctions', 'facilities', 'indset', 'p_center', 'p_median', 'LSCP', 'MCLP', 'TSP', 'MTSP'],
     )
     parser.add_argument(
         '-s', '--seed',
@@ -377,6 +377,18 @@ if __name__ == '__main__':
         instances_valid = glob.glob('data/instances/MCLP/valid_100_100_0.2_8/*.lp')
         instances_test = glob.glob('data/instances/MCLP/test_100_100_0.2_8/*.lp')
         out_dir = 'data/samples/MCLP/100_100_0.2_8'
+
+    elif args.problem == 'TSP':
+        instances_train = glob.glob('data/instances/TSP/train_20/*.lp')
+        instances_valid = glob.glob('data/instances/TSP/valid_20/*.lp')
+        instances_test = glob.glob('data/instances/TSP/test_20/*.lp')
+        out_dir = 'data/samples/TSP/20'
+
+    elif args.problem == 'MTSP':
+        instances_train = glob.glob('data/instances/MTSP/train_15_3/*.lp')
+        instances_valid = glob.glob('data/instances/MTSP/valid_15_3/*.lp')
+        instances_test = glob.glob('data/instances/MTSP/test_15_3/*.lp')
+        out_dir = 'data/samples/MTSP/15_3'
 
     else:
         raise NotImplementedError
